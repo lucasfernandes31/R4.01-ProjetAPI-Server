@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_URI"] !== "/login" && !isset($_SESSION ['username'])) {
     <?php
         $uri = strtok($_SERVER["REQUEST_URI"], '?');
         if ($uri === '/') {
-            $uri = '/login';
+            header('Location: /login');
         }
         require_once './Vue' . $uri . '.php';
     } ?>
