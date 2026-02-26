@@ -1,0 +1,6 @@
+RewriteEngine On
+
+RewriteRule ^feuilledematch(/.*)?$ feuilledematch.php [L]
+RewriteRule ^joueur(/.*)?$ joueur.php [L]
+RewriteRule ^match[/]?(.*)$ match.php [L]
+RewriteRule ^statistiques(/.*)?$ statistiques.php [L]

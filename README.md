@@ -20,19 +20,14 @@ Listen 8081
 
 <VirtualHost *:8081>
     ServerName localhost
-    DocumentRoot C:/xampp/htdocs/R4.01-ProjetAPI-Serveur
+    DocumentRoot C:/xampp/htdocs/R4.01-ProjetAPI-Server
 
-    <Directory "C:/xampp/htdocs/R4.01-ProjetAPI-Serveur">
+    <Directory "C:/xampp/htdocs/R4.01-ProjetAPI-Server">
         Options Indexes FollowSymLinks
-        AllowOverride None
+        AllowOverride All
         Require all granted
     </Directory>
 
-    RewriteEngine On
-    RewriteCond %{REQUEST_URI} !\.(css|jpg)$
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ /index.php [QSA,L]
 </VirtualHost>
 ```
 
