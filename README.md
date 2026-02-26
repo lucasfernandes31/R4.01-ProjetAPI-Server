@@ -16,13 +16,13 @@ rewrite
 ### Configuration du virtual host
 
 ```
-Listen 8080
+Listen 8081
 
-<VirtualHost *:8080>
+<VirtualHost *:8081>
     ServerName localhost
-    DocumentRoot C:/xampp/htdocs/R4.01-ProjetAPI-Client
+    DocumentRoot C:/xampp/htdocs/R4.01-ProjetAPI-Serveur
 
-    <Directory "C:/xampp/htdocs/R4.01-ProjetAPI-Client">
+    <Directory "C:/xampp/htdocs/R4.01-ProjetAPI-Serveur">
         Options Indexes FollowSymLinks
         AllowOverride None
         Require all granted
