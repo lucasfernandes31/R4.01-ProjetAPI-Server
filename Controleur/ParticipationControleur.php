@@ -16,7 +16,6 @@ class ParticipationControleur {
 
     private function __construct() {
         $this->participations = ParticipationDAO::getInstance();
-        $this->joueurs = JoueurControleur::getInstance();
         $this->rencontres = RencontreControleur::getInstance();
     }
 
@@ -50,7 +49,7 @@ class ParticipationControleur {
         ) {
             return false;
         } else {
-            $joueur = $this->joueurs->getJoueurById($joueurId);
+            $joueur = JoueurControleur::getInstance()->getJoueurById($joueurId);
             $rencontre = $this->rencontres->getRenconterById($rencontreId);
 
             $participationACreer = new Participation(
@@ -75,7 +74,7 @@ class ParticipationControleur {
         $participationAModifier = $this->participations->selectParticipationById($participationId);
 
         if ($participationAModifier->getParticipant()->getJoueurId() != $joueurId) {
-            $participationAModifier->setParticipant($this->joueurs->getJoueurById($joueurId));
+            $participationAModifier->setParticipant(JoueurControleur::getInstance()->getJoueurById($joueurId));
         }
 
         $participationAModifier->setPoste($poste);

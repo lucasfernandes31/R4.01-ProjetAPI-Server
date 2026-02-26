@@ -14,7 +14,6 @@ class JoueurControleur {
 
     private function __construct() {
         $this->joueurs = JoueurDAO::getInstance();
-        $this->participationControleur = ParticipationControleur::getInstance();
     }
 
     public static function getInstance(): JoueurControleur {
@@ -56,7 +55,7 @@ class JoueurControleur {
         $joueursSelectionnables = [];
 
         foreach ($joueursActifs as $joueur) {
-            if (!$this->participationControleur->lejoueurEstDejaSurLaFeuilleDeMatch($rencontreId, $joueur->getJoueurId())) {
+            if (!ParticipationControleur::getInstance()->lejoueurEstDejaSurLaFeuilleDeMatch($rencontreId, $joueur->getJoueurId())) {
                 $joueursSelectionnables[] = $joueur;
             }
         }

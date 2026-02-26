@@ -1,4 +1,5 @@
 <?php
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Psr4AutoloaderClass.php';
 use R301\Psr4AutoloaderClass;
 
@@ -47,7 +48,11 @@ if ($_SERVER["REQUEST_URI"] !== "/login" && !isset($_SESSION ['username'])) {
         </nav>
     <?php endif; ?>
     <?php
-        require_once './Vue' . strtok($_SERVER["REQUEST_URI"],'?') . '.php';
+        $uri = strtok($_SERVER["REQUEST_URI"], '?');
+        if ($uri === '/') {
+            $uri = '/tableauDeBord';
+        }
+        require_once './Vue' . $uri . '.php';
     } ?>
     </body>
 </html>
