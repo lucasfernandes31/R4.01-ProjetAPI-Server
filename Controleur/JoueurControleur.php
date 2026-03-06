@@ -6,6 +6,7 @@ use DateTime;
 use R301\Modele\Joueur\Joueur;
 use R301\Modele\Joueur\JoueurDAO;
 use R301\Modele\Joueur\JoueurStatut;
+use R301\Modele\Rencontre\RencontreDAO;
 
 class JoueurControleur {
     private static ?JoueurControleur $instance = null;
@@ -14,6 +15,7 @@ class JoueurControleur {
 
     private function __construct() {
         $this->joueurs = JoueurDAO::getInstance();
+        $this->rencontre = RencontreDAO::getInstance();
     }
 
     public static function getInstance(): JoueurControleur {
@@ -23,7 +25,7 @@ class JoueurControleur {
         return self::$instance;
     }
 
-    public function ajouterJoueur(
+    public function ajouterJoueur( // FAIT
         string $nom,
         string $prenom,
         string $numeroDeLicence,
@@ -46,11 +48,12 @@ class JoueurControleur {
         return $this->joueurs->insertJoueur($joueurACreer);
     }
 
-    public function getJoueurById(int $joueurId) : Joueur {
+    public function getJoueurById(int $joueurId) : Joueur { // FAIT
         return $this->joueurs->selectJoueurById($joueurId);
     }
 
-    public function listerLesJoueursSelectionnablesPourUnMatch(int $rencontreId) : array {
+    public function listerLesJoueursSelectionnablesPourUnMatch(int $rencontreId) : array { // FAIT
+        $this->rencontre->selectRencontreById($rencontreId); // ligne rajoutée pour renforcer la robustesse de l'API. Declenche une erreur si l'ID de rencontre existe pas
         $joueursActifs = $this->joueurs->selectJoueursByStatut(JoueurStatut::ACTIF);
         $joueursSelectionnables = [];
 
@@ -63,11 +66,11 @@ class JoueurControleur {
         return $joueursSelectionnables;
     }
 
-    public function listerTousLesJoueurs() : array {
+    public function listerTousLesJoueurs() : array { // FAIT
         return $this->joueurs->selectAllJoueurs();
     }
 
-    public function modifierJoueur(
+    public function modifierJoueur( // FAIT
         int $joueurId,
         string $nom,
         string $prenom,
@@ -90,7 +93,7 @@ class JoueurControleur {
         return $this->joueurs->updateJoueur($joueurAModifier);
     }
 
-    public function rechercherLesJoueurs(string $recherche, string $statut) : array {
+    public function rechercherLesJoueurs(string $recherche, string $statut) : array { // FAIT
         $tousLesjoueurs = $this->joueurs->selectAllJoueurs();
         $joueursTrouves = [];
 
@@ -113,7 +116,8 @@ class JoueurControleur {
         return $joueursTrouves;
     }
 
-    public function supprimerJoueur(int $joueurId) : bool {
+    public function supprimerJoueur(int $joueurId) : bool { // FAIT
+        $this->joueurs->selectJoueurById($joueurId); // ligne rajoutée pour renforcer la robustesse de l'API. Declenche une erreur si l'ID du joueur n'existe pas
         return $this->joueurs->supprimerJoueur($joueurId);
 }
 }
