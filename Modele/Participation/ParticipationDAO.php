@@ -68,13 +68,14 @@ class ParticipationDAO {
         }
     }
 
-    public function selectParticipationById(string $participationId): Participation
+    public function selectParticipationById(string $participationId): ?Participation
     {
         $query = 'SELECT * FROM participation WHERE participation_id = :participationId';
         $statement=$this->database->pdo()->prepare($query);
         $statement->bindValue(':participationId', $participationId);
         if ($statement->execute()){
-             return $this->mapToParticipation($statement->fetch(PDO::FETCH_ASSOC));
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return $row ? $this->mapToParticipation($row) : null;
         } else {
             exit();
         }
@@ -115,16 +116,24 @@ class ParticipationDAO {
                       note_performance = :note_performance
                   WHERE participation_id = :participation_id';
         $statement=$this->database->pdo()->prepare($query);
-        $statement->bindValue(':note_performance', $participationAModifier->getPerformance()->value);
+        if(!is_null($participationAModifier->getPerformance())){
+            $statement->bindValue(':note_performance', $participationAModifier->getPerformance()->value);
+        } else {
+            $statement->bindValue(':note_performance', null);
+        }
         $statement->bindValue(':participation_id', $participationAModifier->getParticipationId());
-        return $statement->execute();
+        $statement->execute();
+        return is_null($participationAModifier->getPerformance()) 
+               || $this->selectParticipationById($participationAModifier->getParticipationId())->getPerformance() === $participationAModifier->getPerformance()
+               || $statement->rowCount() > 0;
     }
 
     public function deleteParticipation(int $participationId) : bool {
         $query = 'DELETE FROM participation WHERE participation_id = :participationId';
         $statement=$this->database->pdo()->prepare($query);
         $statement->bindValue(':participationId', $participationId);
-        return $statement->execute();
+        $statement->execute();
+        return $statement->rowCount() > 0;
     }
 
     public function lePosteEstDejaOccupe(int $rencontreId, Poste $poste, TitulaireOuRemplacant $titulaireOuRemplacant) : bool {
@@ -143,6 +152,28 @@ class ParticipationDAO {
         }
     }
 
+    // Utile pour vérifier lors de l'update avec l'endpoint participation
+    public function lePosteEstDejaOccupeParticipation(int $participationId, Poste $poste, TitulaireOuRemplacant $titulaireOuRemplacant) : bool {
+        $query = '
+                SELECT COUNT(*) FROM participation 
+                WHERE rencontre_id IN (
+                    SELECT rencontre_id FROM participation
+                    WHERE participation_id = :participationId)
+                AND poste = :poste
+                AND titulaire_ou_remplacant = :titulaireOuRemplacant
+                AND participation_id != :participationId
+        ';
+        $statement=$this->database->pdo()->prepare($query);
+        $statement->bindValue(':participationId', $participationId);
+        $statement->bindValue(':poste', $poste->name);
+        $statement->bindValue('titulaireOuRemplacant', $titulaireOuRemplacant->name);
+        if ($statement->execute()){
+            return $statement->fetchColumn() > 0;
+        } else {
+            exit();
+        }
+    }
+
     public function lejoueurEstDejaSurLaFeuilleDeMatch(int $rencontreId, int $joueur_id) : bool {
         $query = '
                 SELECT * FROM participation 
@@ -153,6 +184,26 @@ class ParticipationDAO {
         $statement->bindValue(':joueur_id', $joueur_id);
         if ($statement->execute()){
             return $statement->fetch() > 0;
+        } else {
+            exit();
+        }
+    }
+
+    // Utile pour vérifier lors de l'update avec l'endpoint participation
+    public function lejoueurEstDejaSurLaFeuilleDeMatchParticipation(int $participationId, int $joueur_id) : bool {
+        $query = '
+                SELECT COUNT(*) FROM participation 
+                WHERE rencontre_id IN (
+                    SELECT rencontre_id FROM participation
+                    WHERE participation_id = :participationId)
+                AND joueur_id = :joueur_id
+                AND participation_id != :participationId
+        ';
+        $statement=$this->database->pdo()->prepare($query);
+        $statement->bindValue(':participationId', $participationId);
+        $statement->bindValue(':joueur_id', $joueur_id);
+        if ($statement->execute()){
+            return $statement->fetchColumn() > 0;
         } else {
             exit();
         }

@@ -59,7 +59,7 @@ class RencontreControleur {
         }
     }
 
-    public function getRenconterById(int $rencontreId) : Rencontre {
+    public function getRenconterById(int $rencontreId) : ?Rencontre {
         return $this->rencontres->selectRencontreById($rencontreId);
     }
 

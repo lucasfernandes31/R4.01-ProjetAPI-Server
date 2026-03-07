@@ -5,7 +5,7 @@ namespace R301\Modele\Participation;
 use R301\Modele\Joueur\Joueur;
 use R301\Modele\Rencontre\Rencontre;
 
-class Participation {
+class Participation implements \JsonSerializable {
     private int $participationId;
     private Joueur $participant;
     private readonly Rencontre $rencontre;
@@ -89,6 +89,19 @@ class Participation {
     public function setPoste(Poste $poste): void
     {
         $this->poste = $poste;
+    }
+
+    public function jsonSerialize(): array {
+        $titulaireOuRemplacant = $this->getTitulaireOuRemplacant();
+        $poste = $this->getPoste();
+        return [
+            'participant' => $this->getParticipant(),
+            'rencontre' => $this->getRencontre(),
+            'participationId' => $this->getParticipationId(),
+            'titulaireOuRemplacant' => $titulaireOuRemplacant != null ? $titulaireOuRemplacant->name : null,
+            'performance' => $this->getPerformance(),
+            'poste' => $poste != null ? $poste->name : null
+        ];
     }
 }
 

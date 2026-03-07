@@ -61,12 +61,13 @@ class JoueurDAO {
         }
     }
 
-    public function selectJoueurById(int $joueurId): Joueur {
+    public function selectJoueurById(int $joueurId): ?Joueur {
         $query = 'SELECT * FROM joueur WHERE joueur_id = :joueur_id';
         $statement=$this->database->pdo()->prepare($query);
         $statement->bindValue(':joueur_id', $joueurId);
         if ($statement->execute()){
-             return $this->mapToJoueur($statement->fetch(PDO::FETCH_ASSOC));
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return $row ? $this->mapToJoueur($row) : null;
         } else {
             exit();
         }

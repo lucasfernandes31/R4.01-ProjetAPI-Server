@@ -26,19 +26,23 @@ class ParticipationControleur {
         return self::$instance;
     }
 
-    public function lejoueurEstDejaSurLaFeuilleDeMatch(int $rencontreId, int $joueurId) : bool {
+    public function lejoueurEstDejaSurLaFeuilleDeMatch(int $rencontreId, int $joueurId) : bool { // PAS FAIT car pas utile niveau endpoint, utilisé par d'autres controlleurs seulement
         return $this->participations->lejoueurEstDejaSurLaFeuilleDeMatch($rencontreId, $joueurId);
     }
 
-    public function listerToutesLesParticipations() : array {
+    public function listerToutesLesParticipations() : array { // FAIT
         return $this->participations->selectAllParticipations();
     }
 
-    public function getFeuilleDeMatch(int $rencontreId) : FeuilleDeMatch {
+    public function getFeuilleDeMatch(int $rencontreId) : FeuilleDeMatch { // FAIT
         return new FeuilleDeMatch($this->participations->selectParticipationsByRencontreId($rencontreId));
     }
 
-    public function assignerUnParticipant(
+    public function getParticipationById(int $participationId) : ?Participation {
+        return $this->participations->selectParticipationById($participationId);
+    }
+
+    public function assignerUnParticipant( // FAIT
         int $joueurId,
         int $rencontreId,
         Poste $poste,
@@ -65,29 +69,35 @@ class ParticipationControleur {
         }
     }
 
-    public function modifierParticipation(
+    public function modifierParticipation( // FAIT
         int $participationId,
         Poste $poste,
         TitulaireOuRemplacant $titulaireOuRemplacant,
         int $joueurId
     ) : bool {
-        $participationAModifier = $this->participations->selectParticipationById($participationId);
+        if ($this->participations->lejoueurEstDejaSurLaFeuilleDeMatchParticipation($participationId,$joueurId)
+            || $this->participations->lePosteEstDejaOccupeParticipation($participationId, $poste, $titulaireOuRemplacant)
+        ) {
+            return false;
+        } else {
+            $participationAModifier = $this->participations->selectParticipationById($participationId);
 
-        if ($participationAModifier->getParticipant()->getJoueurId() != $joueurId) {
-            $participationAModifier->setParticipant(JoueurControleur::getInstance()->getJoueurById($joueurId));
+            if ($participationAModifier->getParticipant()->getJoueurId() != $joueurId) {
+                $participationAModifier->setParticipant(JoueurControleur::getInstance()->getJoueurById($joueurId));
+            }
+
+            $participationAModifier->setPoste($poste);
+            $participationAModifier->setTitulaireOuRemplacant($titulaireOuRemplacant);
+
+            return $this->participations->updateParticipation($participationAModifier);
         }
-
-        $participationAModifier->setPoste($poste);
-        $participationAModifier->setTitulaireOuRemplacant($titulaireOuRemplacant);
-
-        return $this->participations->updateParticipation($participationAModifier);
     }
 
-    public function supprimerLaParticipation(int $participationId) : bool {
+    public function supprimerLaParticipation(int $participationId) : bool { // FAIT
         return $this->participations->deleteParticipation($participationId);
     }
 
-    public function mettreAJourLaPerformance(
+    public function mettreAJourLaPerformance( // FAIT
         int $participationId,
         string $performance
     ) : bool {
@@ -97,7 +107,8 @@ class ParticipationControleur {
             return false;
         }
 
-        $participationAEvaluer->setPerformance(Performance::fromName($performance));
+        $perf = Performance::fromName($performance) ?? Performance::fromValue((int)$performance);
+        $participationAEvaluer->setPerformance($perf);
         return $this->participations->updatePerformance($participationAEvaluer);
     }
 

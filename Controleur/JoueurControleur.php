@@ -48,7 +48,7 @@ class JoueurControleur {
         return $this->joueurs->insertJoueur($joueurACreer);
     }
 
-    public function getJoueurById(int $joueurId) : Joueur { // FAIT
+    public function getJoueurById(int $joueurId) : ?Joueur { // FAIT
         return $this->joueurs->selectJoueurById($joueurId);
     }
 

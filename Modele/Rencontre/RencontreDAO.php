@@ -45,13 +45,14 @@ class RencontreDAO {
         }
     }
 
-    public function selectRencontreById(string $rencontreId): Rencontre
+    public function selectRencontreById(string $rencontreId): ?Rencontre
     {
         $query = 'SELECT * FROM rencontre WHERE rencontre_id = :rencontreId';
         $statement=$this->database->pdo()->prepare($query);
         $statement->bindValue(':rencontreId', $rencontreId);
         if ($statement->execute()){
-             return $this->mapToRencontre($statement->fetch(PDO::FETCH_ASSOC));
+             $row = $statement->fetch(PDO::FETCH_ASSOC);
+             return $row ? $this->mapToRencontre($row) : null;
         } else {
             exit();
         }
