@@ -31,16 +31,24 @@ switch($http_method){
     //////////
     // Obtenir les stats de l'équipe
     if(isset($_GET['equipe'])){
-      $result = $statistiquesControleur->getStatistiquesEquipe();
-      deliver_response(200,"Statistiques de l'équipe récupérées avec succès.", $result);
+      try {
+        $result = $statistiquesControleur->getStatistiquesEquipe();
+        deliver_response(200,"Statistiques de l'équipe récupérées avec succès.", $result);
+      } catch (\Throwable $ex){
+        deliver_response(500,"Erreur interne au serveur.");
+      }
       break;
     }
 
     //////////
     // Obtenir les stats des joueurs
     if(isset($_GET['joueurs'])){
-      $result = $statistiquesControleur->getStatistiquesJoueurs();
-      deliver_response(200,"Statistiques des joueurs récupérées avec succès.", $result);
+      try {
+        $result = $statistiquesControleur->getStatistiquesJoueurs();
+        deliver_response(200,"Statistiques des joueurs récupérées avec succès.", $result);
+      } catch (\Throwable $ex){
+        deliver_response(500,"Erreur interne au serveur.");
+      }
       break;
     }
 
