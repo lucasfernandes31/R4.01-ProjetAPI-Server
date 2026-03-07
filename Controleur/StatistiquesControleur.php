@@ -19,6 +19,7 @@ class StatistiquesControleur {
     private function __construct() {
         $this->rencontres = RencontreControleur::getInstance();
         $this->participations = ParticipationControleur::getInstance();
+        $this->joueurs = JoueurControleur::getInstance();
     }
 
     public static function getInstance(): StatistiquesControleur {
@@ -33,6 +34,8 @@ class StatistiquesControleur {
     }
 
     public function getStatistiquesJoueurs() : StatistiquesJoueurs {
-        return new StatistiquesJoueurs($this->participations->listerToutesLesParticipations(), $this->rencontres->listerToutesLesRencontres());
+        return new StatistiquesJoueurs($this->participations->listerToutesLesParticipations(), $this->rencontres->listerToutesLesRencontres(), $this->joueurs->listerTousLesJoueurs());
+        // note : j'ai ajouté la liste de tous les joueurs au constructeur de statistiques joueurs pour que le jsonSerialize puisse itérer sur chaque joueur
+        // comme les méthodes de la classe sont propres à chaque joueur    
     }
 }

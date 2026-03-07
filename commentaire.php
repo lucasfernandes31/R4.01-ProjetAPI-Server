@@ -14,6 +14,8 @@ switch($http_method){
 
   case 'GET':
 
+    //////////
+    // Récupération des commentaires pour un joueur d'ID joueurId
     if(isset($_GET['joueurId'])){
 
       try{ 
@@ -35,6 +37,8 @@ switch($http_method){
     $postedData = file_get_contents('php://input');
     $data = json_decode($postedData, true);
 
+    //////////
+    // Création d'un nouveau commentaire pour le joueur d'ID joueurId
     if(isset($data['contenu']) && isset($data['joueurId'])){
 
       try{
@@ -59,6 +63,8 @@ switch($http_method){
   
   case 'DELETE':
 
+    //////////
+    // Suppression du commentaire d'ID commentaireId
     if(isset($_GET['commentaireId'])){
 
       if($commentaireControleur->supprimerCommentaire($_GET['commentaireId'])){

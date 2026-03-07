@@ -4,7 +4,7 @@ namespace R301\Modele\Statistiques;
 
 use R301\Modele\Rencontre\RencontreResultat;
 
-class StatistiquesEquipe {
+class StatistiquesEquipe implements \JsonSerializable {
     private readonly array $rencontres;
 
     public function __construct(
@@ -39,6 +39,17 @@ class StatistiquesEquipe {
 
     public function pourcentageDeDefaites(): int {
         return $this->nbDefaites() / $this->nbMatchsJoues() * 100;
+    }
+
+    public function jsonSerialize(): array {
+        return [
+            'nbVictoires' => $this->nbVictoires(),
+            'nbNuls' => $this->nbNuls(),
+            'nbDefaites' => $this->nbDefaites(),
+            'pourcentageDeVictoires' => $this->pourcentageDeVictoires(),
+            'pourcentageDeNuls' => $this->pourcentageDeNuls(),
+            'pourcentageDeDefaites' => $this->pourcentageDeDefaites()
+        ];
     }
 }
 

@@ -5,17 +5,19 @@ namespace R301\Modele\Statistiques;
 use R301\Modele\Joueur\Joueur;
 use R301\Modele\Participation\Poste;
 
-class StatistiquesJoueurs {
+class StatistiquesJoueurs implements \JsonSerializable {
     private readonly array $participations;
     private readonly array $rencontresJouees;
 
     public function __construct(
         array $participations,
         array $rencontres,
+        array $joueurs
     ) {
         $this->participations = $participations;
         usort($rencontres, function ($a, $b) { return $a->getDateEtHeure() <=> $b->getDateEtHeure(); });
         $this->rencontresJouees = array_filter($rencontres, function ($rencontre) { return $rencontre->joue(); });
+        $this->joueurs = $joueurs;
     }
 
     private function participationsDunJoueur(Joueur $joueur): array {
@@ -134,6 +136,23 @@ class StatistiquesJoueurs {
         } else {
             return null;
         }
+    }
+
+    public function jsonSerialize(): array {
+        $result = [];
+        foreach($this->joueurs as $joueur){
+            $poste = $this->posteLePlusPerformant($joueur); // obligé de décomposer le poste car peut être null et dans ce cas là alors on utilise pas name dessus
+            $result[] = [
+                'joueur_id' => $joueur->getJoueurId(),
+                'posteLePlusPerformant' => $poste !== null ? $poste->name : null, // si le poste est pas nul alors retourner le nom de l'enum, sinon null
+                'nbRencontresConsecutives' => $this->nbRencontresConsecutivesADate($joueur),
+                'nbTitularisations' => $this->nbTitularisations($joueur),
+                'nbRemplacant' => $this->nbRemplacant($joueur),
+                'moyenneDesEvaluations' => $this->moyenneDesEvaluations($joueur),
+                'pourcentageDeMatchsGagnes' => $this->pourcentageDeMatchsGagnes($joueur)
+            ];
+        }
+        return $result;
     }
 }
 

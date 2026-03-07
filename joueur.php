@@ -16,13 +16,13 @@ switch($http_method){
   case 'GET':
 
     ///////////
-    // Vérification de la validité des paramètres (A FAIRE POUR TOUTES LES METHODES DE TOUS LES ENDPOINTS, cool niveau sécu)
+    // Vérification de la validité des paramètres (fait ici car plus simple et mieux qu'un if englobant)
     $allowed_params = ['id', 'recherche', 'statut', 'rencontreId'];
     $unknown_params = array_diff(array_keys($_GET), $allowed_params);
     
     if(!empty($unknown_params)){
-        deliver_response(400, "Paramètre(s) inconnu(s)");
-        break;
+      deliver_response(400, "Paramètre(s) inconnu(s)");
+      break;
     }
 
     ///////////
