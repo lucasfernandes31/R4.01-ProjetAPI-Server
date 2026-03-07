@@ -23,28 +23,24 @@ class RencontreControleur {
         return self::$instance;
     }
 
-    public function ajouterRencontre(
+    public function ajouterRencontre( // FAIT
         DateTime $dateHeure,
         string $equipeAdverse,
         string $adresse,
         RencontreLieu $lieu
     ) : bool {
 
-        if ($dateHeure < date("Y-m-d H:i:s")) {
-            return false;
-        } else {
-            $rencontreAAjouter = new Rencontre(
-                $dateHeure,
-                $equipeAdverse,
-                $adresse,
-                $lieu
-            );
+        $rencontreAAjouter = new Rencontre(
+            $dateHeure,
+            $equipeAdverse,
+            $adresse,
+            $lieu
+        );
 
-            return $this->rencontres->insertRencontre($rencontreAAjouter);
-        }
+        return $this->rencontres->insertRencontre($rencontreAAjouter);
     }
 
-    public function enregistrerResultat(
+    public function enregistrerResultat( // FAIT
         int $rencontreId,
         string $resultat
     ) : bool {
@@ -59,11 +55,11 @@ class RencontreControleur {
         }
     }
 
-    public function getRenconterById(int $rencontreId) : ?Rencontre {
+    public function getRenconterById(int $rencontreId) : ?Rencontre { // FAIT
         return $this->rencontres->selectRencontreById($rencontreId);
     }
 
-    public function listerToutesLesRencontres() : array {
+    public function listerToutesLesRencontres() : array { // FAIT
         return $this->rencontres->selectAllRencontres();
     }
 
@@ -92,7 +88,7 @@ class RencontreControleur {
         }
     }
 
-    public function supprimerRencontre(int $rencontreId) : bool {
+    public function supprimerRencontre(int $rencontreId) : bool { // FAIT
         $rencontreASupprimer = $this->rencontres->selectRencontreById($rencontreId);
 
         if($rencontreASupprimer->getResultat() != null) {

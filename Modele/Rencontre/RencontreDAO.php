@@ -68,7 +68,7 @@ class RencontreDAO {
         $statement->bindValue(':equipe_adverse', $rencontreACreer->getEquipeAdverse());
         $statement->bindValue(':adresse', $rencontreACreer->getAdresse());
         $statement->bindValue(':lieu', $rencontreACreer->getLieu()->name);
-        $statement->bindValue(':resultat', $rencontreACreer->getResultat()->name);
+        $statement->bindValue(':resultat', $rencontreACreer->getResultat()?->name);
 
         return $statement->execute();
     }
