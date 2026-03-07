@@ -1,6 +1,7 @@
 RewriteEngine On
 
-RewriteRule ^feuilledematch(/.*)?$ feuilledematch.php [L]
+RewriteRule ^commentaire(/.*)?$ commentaire.php [L]
 RewriteRule ^joueur(/.*)?$ joueur.php [L]
-RewriteRule ^match[/]?(.*)$ match.php [L]
+RewriteRule ^participation[/]?(.*)$ participation.php [L]
+RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
 RewriteRule ^statistiques(/.*)?$ statistiques.php [L]

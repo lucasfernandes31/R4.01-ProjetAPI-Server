@@ -15,6 +15,7 @@ class CommentaireControleur {
 
     private function __construct() {
         $this->commentaires = CommentaireDAO::getInstance();
+        $this->joueurs = JoueurDAO::getInstance();
     }
 
     public static function getInstance(): CommentaireControleur {
@@ -24,7 +25,7 @@ class CommentaireControleur {
         return self::$instance;
     }
 
-    public function ajouterCommentaire(
+    public function ajouterCommentaire( // FAIT
         string $contenu,
         string $joueurId
     ) : bool {
@@ -38,11 +39,12 @@ class CommentaireControleur {
         return $this->commentaires->insertCommentaire($commentaireACreer, $joueurId);
     }
 
-    public function listerLesCommentairesDuJoueur(Joueur $joueur) : array {
-        return $this->commentaires->selectCommentaireByJoueurId($joueur->getJoueurId());
+    public function listerLesCommentairesDuJoueur(string $joueurId) : array { // FAIT
+        $this->joueurs->selectJoueurById($joueurId); // pour renforcer robustesse de l'API, fait planter la fonction (exit) si aucun joueur trouvé
+        return $this->commentaires->selectCommentaireByJoueurId($joueurId);
     }
 
-    public function supprimerCommentaire(string $commentaireId) : bool {
+    public function supprimerCommentaire(string $commentaireId) : bool { // FAIT
         return $this->commentaires->deleteCommentaire($commentaireId);
     }
 }
