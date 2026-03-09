@@ -97,6 +97,11 @@ switch($http_method){
           break;
         }
 
+        if(!isStatutValid($data['statut'])){
+          deliver_response(400, 'Statut invalide, format attendu : ACTIF, BLESSE, ABSENT ou SUSPENDU.');
+          break;
+        }
+
         $dateDeNaissance = DateTime::createFromFormat('Y-m-d', $data['dateDeNaissance']);
 
         $success = $joueurControleur->ajouterJoueur(
@@ -204,7 +209,7 @@ function arePostPutChampsValids($nom,$prenom,$numLicence,$dateDeNaissance,$taill
           !is_null($dateDeNaissance)  &&
           !is_null($tailleCm) && isIntString($tailleCm) &&
           !is_null($poidsKg) && isIntString($poidsKg) &&
-          !is_null($statut) && isStatutValid($statut);
+          !is_null($statut);
 }
 
 //////////
