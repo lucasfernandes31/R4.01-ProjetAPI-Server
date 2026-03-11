@@ -134,8 +134,8 @@ switch($http_method){
     $data = json_decode($postedData, true);
 
     // Vérification validité des champs
-    if(arePostPutChampsValids($data['nom'] ?? null,$data['prenom'] ?? null,$data['numeroDeLicence'] ?? null,$data['dateDeNaissance'] ?? null,
-                              $data['tailleEnCm'] ?? null,$data['poidsEnKg'] ?? null,$data['statut'] ?? null) && isset($data['joueurId']) && isIntString($data['joueurId']) ) {
+    if(isset($_GET['id']) && arePostPutChampsValids($data['nom'] ?? null,$data['prenom'] ?? null,$data['numeroDeLicence'] ?? null,$data['dateDeNaissance'] ?? null,
+                              $data['tailleEnCm'] ?? null,$data['poidsEnKg'] ?? null,$data['statut'] ?? null) && isIntString($_GET['id']) ) {
 
         if(!isDateNaissanceValide($data['dateDeNaissance'])){
           deliver_response(400, 'Date de naissance au mauvais format. Format attendu : Y-m-d. Joueur de maximum 90 ans et de minimum 10 ans.');
@@ -146,7 +146,7 @@ switch($http_method){
 
         try {
           $success = $joueurControleur->modifierJoueur(
-            $data['joueurId'],
+            $_GET['id'],
             $data['nom'],
             $data['prenom'],
             $data['numeroDeLicence'],
@@ -155,9 +155,9 @@ switch($http_method){
             (int)$data['poidsEnKg'],
             $data['statut']
           );
-          deliver_response(200, "La requête a réussi et le joueur d'id ". $data['joueurId'] ." a été mis à jour.");
+          deliver_response(200, "La requête a réussi et le joueur d'id ". $_GET['id'] ." a été mis à jour.");
         } catch (\Throwable $ex){
-          deliver_response(404, "Le joueur d'ID ".$data['joueurId']." n'existe pas.");
+          deliver_response(404, "Le joueur d'ID ". $_GET['id'] ." n'existe pas.");
         }
     } else {
       deliver_response(400, "Syntaxe de la requête non conforme, paramètres manquants ou au mauvais format.");
