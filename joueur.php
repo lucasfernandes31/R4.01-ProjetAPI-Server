@@ -135,7 +135,7 @@ switch($http_method){
 
     // Vérification validité des champs
     if(isset($_GET['id']) && arePostPutChampsValids($data['nom'] ?? null,$data['prenom'] ?? null,$data['numeroDeLicence'] ?? null,$data['dateDeNaissance'] ?? null,
-                              $data['tailleEnCm'] ?? null,$data['poidsEnKg'] ?? null,$data['statut'] ?? null) && isIntString($_GET['id']) ) {
+                             $data['tailleEnCm'] ?? null,$data['poidsEnKg'] ?? null,$data['statut'] ?? null) && isIntString($_GET['id']) ) {
 
         if(!isDateNaissanceValide($data['dateDeNaissance'])){
           deliver_response(400, 'Date de naissance au mauvais format. Format attendu : Y-m-d. Joueur de maximum 90 ans et de minimum 10 ans.');
