@@ -1,7 +1,65 @@
 RewriteEngine On
 
+#Classe Commentaire
+
+#Réecriture pour le GET du Commentaire pour le récupérer
+#http://localhost:8081/commentaire?joueurId=2 --> http://localhost:8081/commentaire/2
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^commentaire/([0-9]+)$ commentaire.php?joueurId=$1 [L]
+
+#Réecriture pour le DELETE du Joueur pour le supprimer
+#http://localhost:8081/?commentaireId=8 --> http://localhost:8081/commentaire/8
+RewriteCond %{REQUEST_METHOD} DELETE
+RewriteRule ^commentaire/([0-9]+)$ commentaire.php?commentaireId=$1 [L]
+
+#Réecriture pour l'url des Commentaires
+#http://localhost:8081/commentaire.php --> http://localhost:8081/commentaire
 RewriteRule ^commentaire(/.*)?$ commentaire.php [L]
+
+#Classe Joueur
+
+#Réecriture pour le GET du Joueur pour le récupérer
+#http://localhost:8081/joueur?id=8 --> http://localhost:8081/joueur/8
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^joueur/([0-9]+)$ joueur.php?id=$1 [L]
+
+#Réecriture pour le PUT du Joueur pour le modifier
+#http://localhost:8081/joueur?id=8 --> http://localhost:8081/joueur/8
+RewriteCond %{REQUEST_METHOD} PUT
+RewriteRule ^joueur/([0-9]+)$ joueur.php?id=$1 [L]
+
+#Réecriture pour le DELETE du Joueur pour le supprimer
+#http://localhost:8081/joueur?id=8 --> http://localhost:8081/joueur/8
+RewriteCond %{REQUEST_METHOD} DELETE
+RewriteRule ^joueur/([0-9]+)$ joueur.php?id=$1 [L]
+
+#Réecriture pour l'url des Joueurs
+#http://localhost:8081/joueur.php --> http://localhost:8081/joueur
 RewriteRule ^joueur(/.*)?$ joueur.php [L]
+
+#Classe Participation
+
+#Réecriture pour le GET de la Participation pour la récupérer
+#http://localhost:8081/participation?rencontreId=1 --> http://localhost:8081/participation/1
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^participation/([0-9]+)$ participation.php?rencontreId=$1 [L]
+
+#Réecriture pour le PUT de la Participation pour la modifier
+#http://localhost:8081/participation?participationId=24 --> http://localhost:8081/participation/24
+RewriteCond %{REQUEST_METHOD} PUT
+RewriteRule ^participation/([0-9]+)$ participation.php?participationId=$1 [L]
+
+#Réecriture pour le DELETE de la Participation pour le supprimer
+#http://localhost:8081/participation?participationId=8 --> http://localhost:8081/participation/8
+RewriteCond %{REQUEST_METHOD} DELETE
+RewriteRule ^participation/([0-9]+)$ participation.php?id=$1 [L]
+
+#Réecriture pour l'url des Participations
+#http://localhost:8081/participation.php --> http://localhost:8081/participation
 RewriteRule ^participation[/]?(.*)$ participation.php [L]
+
+#Classe Rencontre
 RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
+
+#Classe Statistiques
 RewriteRule ^statistiques(/.*)?$ statistiques.php [L]
