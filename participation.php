@@ -77,14 +77,14 @@ switch($http_method){
 
     //////////
     // Modification de la performance
-    if(isset($data['participationId']) && isset($data['performance'])){
+    if(isset($_GET['participationId']) && isset($data['performance']) && isIntString($_GET['participationId'])){
 
-      if(isIntString($data['participationId']) && isPerformanceStrValid($data['performance']) && $participationControleur->getParticipationById($data['participationId']) !== null){
+      if(isPerformanceStrValid($data['performance']) && $participationControleur->getParticipationById(($_GET['participationId'] !== null))){
 
-        if($participationControleur->mettreAJourLaPerformance((int)$data['participationId'], $data['performance'])){
-          deliver_response(200, "Performance de la participation d'ID " . $data['participationId'] . " mise à jour avec succès.");
+        if($participationControleur->mettreAJourLaPerformance((int) $_GET['participationId'], $data['performance'])){
+          deliver_response(200, "Performance de la participation d'ID " . $_GET['participationId'] . " mise à jour avec succès.");
         } else {
-          deliver_response(422, "Vous ne pouvez pas mettre à jour les performances d'un macth qui n'a pas encore eu lieu.");
+          deliver_response(422, "Vous ne pouvez pas mettre à jour les performances d'un match qui n'a pas encore eu lieu.");
         }
 
       } else {
@@ -95,15 +95,15 @@ switch($http_method){
 
     //////////
     // Modification de la participation
-    if(arePutChampsValids($data['participationId'] ?? null, $data['poste'] ?? null, $data['titulaireOuRemplacant'] ?? null, $data['joueurId'] ?? null)){
+    if(isset($_GET['participationId']) && arePutChampsValids($data['poste'] ?? null, $data['titulaireOuRemplacant'] ?? null, $data['joueurId'] ?? null) && isIntString($_GET['participationId'])){
       
       $poste = Poste::fromName($data['poste']);
       $titulaireOuRemplacant = TitulaireOuRemplacant::fromName($data['titulaireOuRemplacant']);
 
-      if(!$participationControleur->modifierParticipation((int)$data['participationId'],$poste,$titulaireOuRemplacant,(int)$data['joueurId'])){
+      if(!$participationControleur->modifierParticipation((int)$_GET['participationId'],$poste,$titulaireOuRemplacant,(int)$data['joueurId'])){
         deliver_response(400, "Le joueur est déjà sur la feuille de match ou le poste est déjà occupé.");
       } else {
-        deliver_response(200, "Participation d'ID " . $data['participationId'] . " modifiée avec succès.");
+        deliver_response(200, "Participation d'ID " . $_GET['participationId'] . " modifiée avec succès.");
       }
 
     } else {
@@ -186,32 +186,26 @@ function arePostChampsValids($joueurId, $rencontreId, $poste, $titulaireOuRempla
 //////////
 // Fonction permettant de vérifier la validité des champs passés pour la méthodes PUT
 // retourne true si valides, false si invalides
-function arePutChampsValids($participationId, $poste, $titulaireOuRemplacant, $joueurId){
+function arePutChampsValids($poste, $titulaireOuRemplacant, $joueurId){
 
     $joueurControleur = JoueurControleur::getInstance();
     $participationControleur = ParticipationControleur::getInstance();
 
-    $verif1 = !is_null($participationId) && !is_null($poste) && !is_null($titulaireOuRemplacant) && !is_null($joueurId);
+    !is_null($poste) && !is_null($titulaireOuRemplacant) && !is_null($joueurId);
+
+    $verif1 = isIntString($joueurId);
 
     if(!$verif1){
       return false;
     }
 
-    $verif2 = isIntString($participationId) && isIntString($joueurId);
+    $verif2 = $joueurControleur->getJoueurById($joueurId) !== null;
 
-    if(!$verif2){
-      return false;
-    }
+    $verif3 = !is_null(Poste::fromName($poste));
 
-    $verif3 = $joueurControleur->getJoueurById($joueurId) !== null;
+    $verif4 = !is_null(TitulaireOuRemplacant::fromName($titulaireOuRemplacant));
 
-    $verif4 = $participationControleur->getParticipationById($participationId) !== null;
-
-    $verif5 = !is_null(Poste::fromName($poste));
-
-    $verif6 = !is_null(TitulaireOuRemplacant::fromName($titulaireOuRemplacant));
-
-    return $verif1 && $verif2 && $verif3 && $verif4 && $verif5 && $verif6;
+    return $verif1 && $verif2 && $verif3 && $verif4;
 }
 
 //////////
