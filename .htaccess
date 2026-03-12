@@ -23,6 +23,18 @@ RewriteRule ^commentaire(/.*)?$ commentaire.php [L]
 RewriteCond %{REQUEST_METHOD} GET
 RewriteRule ^joueur/([0-9]+)$ joueur.php?id=$1 [L]
 
+#Réecriture pour le GET du Joueur pour récupérer la liste des joueurs avec un certain statut et une recherche sur tous les champs des joueurs (nom,num tel, prenom...)
+#Le paramètre STATUT peut être null donc je rajoute une étoile dans la condition de caractère pour inclure la chaîne vide
+#"+" signifie un ou plusieurs et "*" signifie 0 ou plusieurs
+#http://localhost:8081/joueur?recherche=Le&statut=ACTIF --> http://localhost:8081/joueur/recherche/Le/ACTIF
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^joueur/recherche/([^/]+)/([^/]*)$ joueur.php?recherche=$1&statut=$2 [L]
+
+#Réecriture pour le Get du Joueur pour récupérer des Joueurs à partir d'un ID de Rencontre
+#http://localhost:8081/joueur?rencontreId=4 --> http://localhost:8081/joueur/rencontre/4
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^joueur/rencontre/([0-9]+)$ joueur.php?rencontreId=$1 [L]
+
 #Réecriture pour le PUT du Joueur pour le modifier
 #http://localhost:8081/joueur?id=8 --> http://localhost:8081/joueur/8
 RewriteCond %{REQUEST_METHOD} PUT
