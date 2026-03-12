@@ -81,4 +81,18 @@ RewriteRule ^rencontre/([0-9]+)$ rencontre.php?rencontreId=$1 [L]
 RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
 
 #Classe Statistiques
+
+#Réecriture pour le GET des Statistiques pour avoir les statistiques de l'équipe
+#Cela marche même quand le paramètre est null car le paramètre ne change rien (il faudra l'utiliser comme ça)
+#http://localhost:8081/statistiques?equipe= --> http://localhost:8081/statistiques/equipe/
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^statistiques/equipe/([0-9]*)$ statistiques.php?equipe=$1 [L]
+
+#Réecriture pour le GET des Statistiques pour avoir les statistiques de tous les joueurs
+#Cela marche même quand le paramètre est null car le paramètre ne change rien (il faudra l'utiliser comme ça)
+#http://localhost:8081/statistiques?joueurs= --> http://localhost:8081/statistiques/joueurs/
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^statistiques/joueurs/([0-9]*)$ statistiques.php?joueurs=$1 [L]
+
+#Réecriture pour l'url des Statistiques
 RewriteRule ^statistiques(/.*)?$ statistiques.php [L]
