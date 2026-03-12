@@ -71,6 +71,13 @@ RewriteRule ^participation/([0-9]+)$ participation.php?id=$1 [L]
 RewriteRule ^participation[/]?(.*)$ participation.php [L]
 
 #Classe Rencontre
+
+#Réecriture pour le GET de la Rencontre pour la récupérer
+#http://localhost:8081/rencontre?rencontreId=4 --> http://localhost:8081/rencontre/4
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^rencontre/([0-9]+)$ rencontre.php?rencontreId=$1 [L]
+
+#Réecriture pour l'url des Rencontres
 RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
 
 #Classe Statistiques
