@@ -1,13 +1,15 @@
 RewriteEngine On
 
+
+#############
 #Classe Commentaire
 
 #Réecriture pour le GET du Commentaire pour le récupérer
-#http://localhost:8081/commentaire?joueurId=2 --> http://localhost:8081/commentaire/2
+#http://localhost:8081/commentaire?joueurId=2 --> http://localhost:8081/joueur/2/commentaire
 RewriteCond %{REQUEST_METHOD} GET
-RewriteRule ^commentaire/([0-9]+)$ commentaire.php?joueurId=$1 [L]
+RewriteRule ^joueur/([0-9]+)/commentaire$ commentaire.php?joueurId=$1 [L]
 
-#Réecriture pour le DELETE du Joueur pour le supprimer
+#Réecriture pour le DELETE d'un commentaire pour le supprimer
 #http://localhost:8081/?commentaireId=8 --> http://localhost:8081/commentaire/8
 RewriteCond %{REQUEST_METHOD} DELETE
 RewriteRule ^commentaire/([0-9]+)$ commentaire.php?commentaireId=$1 [L]
@@ -16,6 +18,8 @@ RewriteRule ^commentaire/([0-9]+)$ commentaire.php?commentaireId=$1 [L]
 #http://localhost:8081/commentaire.php --> http://localhost:8081/commentaire
 RewriteRule ^commentaire(/.*)?$ commentaire.php [L]
 
+
+#############
 #Classe Joueur
 
 #Réecriture pour le GET du Joueur pour le récupérer
@@ -49,6 +53,8 @@ RewriteRule ^joueur/([0-9]+)$ joueur.php?id=$1 [L]
 #http://localhost:8081/joueur.php --> http://localhost:8081/joueur
 RewriteRule ^joueur(/.*)?$ joueur.php [L]
 
+
+#############
 #Classe Participation
 
 #Réecriture pour le GET de la Participation pour la récupérer
@@ -70,6 +76,8 @@ RewriteRule ^participation/([0-9]+)$ participation.php?id=$1 [L]
 #http://localhost:8081/participation.php --> http://localhost:8081/participation
 RewriteRule ^participation[/]?(.*)$ participation.php [L]
 
+
+#############
 #Classe Rencontre
 
 #Réecriture pour le GET de la Rencontre pour la récupérer
@@ -80,6 +88,8 @@ RewriteRule ^rencontre/([0-9]+)$ rencontre.php?rencontreId=$1 [L]
 #Réecriture pour l'url des Rencontres
 RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
 
+
+#############
 #Classe Statistiques
 
 #Réecriture pour le GET des Statistiques pour avoir les statistiques de l'équipe

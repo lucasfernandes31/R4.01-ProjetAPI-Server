@@ -39,7 +39,7 @@ switch($http_method){
 
     //////////
     // Création d'un nouveau commentaire pour le joueur d'ID joueurId
-    if(isset($data['contenu']) && isset($data['joueurId'])){
+    if(isset($data['contenu']) && isset($data['joueurId']) && !($data['contenu'] === "")){
 
       try{
 
