@@ -66,7 +66,7 @@ switch($http_method){
         break;
       }
 
-      $ddr = DateTime::createFromFormat('Y-m-d H:i:s', $data['dateHeure']);
+      $ddr = new DateTime($data['dateHeure']);  
       $lieu = RencontreLieu::fromName($data['lieu']);
 
       if($rencontreControleur->ajouterRencontre($ddr,$data['equipeAdverse'],$data['adresse'],$lieu)){
@@ -111,7 +111,7 @@ switch($http_method){
         break;
       }
 
-      $ddr = DateTime::createFromFormat('Y-m-d H:i:s', $data['dateHeure']);
+      $ddr = new DateTime($data['dateHeure']);  
       $lieu = RencontreLieu::fromName($data['lieu']);
 
       if($rencontreControleur->modifierRencontre((int)$data['rencontreId'], $ddr, $data['equipeAdverse'], $data['adresse'], $lieu)){
@@ -190,11 +190,9 @@ switch($http_method){
 // Fonction permettant de vérifier la validité d'une date de rencontre (format + ultérieure à la date de maintenant)
 // retourne true si valide, false si invalide
 function isDateRencontreValide($dateRencontre){
-  
-  $ddr = DateTime::createFromFormat('Y-m-d H:i:s', $dateRencontre);
-  // est false si format invalide
-  return $ddr && $ddr > date("Y-m-d H:i:s");
-}
+  $ddr = DateTime::createFromFormat('Y-m-d\TH:i', $dateRencontre);
+  return $ddr && $ddr > new DateTime();
+  }
 
 //////////
 // Fonction permettant de vérifier si un lieu de rencontre fourni est valide ou non
