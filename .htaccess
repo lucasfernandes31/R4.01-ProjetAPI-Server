@@ -85,9 +85,13 @@ RewriteRule ^participation[/]?(.*)$ participation.php [L]
 RewriteCond %{REQUEST_METHOD} GET
 RewriteRule ^rencontre/([0-9]+)$ rencontre.php?rencontreId=$1 [L]
 
+#Réecriture pour le DELETE de la Rencontre pour la supprimer
+#http://localhost:8081/rencontre?rencontreId=4 --> http://localhost:8081/rencontre/4
+RewriteCond %{REQUEST_METHOD} DELETE
+RewriteRule ^rencontre/([0-9]+)$ rencontre.php?rencontreId=$1 [L]
+
 #Réecriture pour l'url des Rencontres
 RewriteRule ^rencontre(/.*)?$ rencontre.php [L]
-
 
 #############
 #Classe Statistiques
