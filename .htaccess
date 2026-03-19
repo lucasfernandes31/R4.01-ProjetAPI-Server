@@ -110,3 +110,9 @@ RewriteRule ^statistiques/joueurs/([0-9]*)$ statistiques.php?joueurs=$1 [L]
 
 #Réecriture pour l'url des Statistiques
 RewriteRule ^statistiques(/.*)?$ statistiques.php [L]
+
+
+## Pour rendre inaccessibles les fichiers cachés (.env, etc.)
+<FilesMatch "^\.">
+Require all denied
+</FilesMatch>
