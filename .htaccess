@@ -67,10 +67,15 @@ RewriteRule ^participation/([0-9]+)$ participation.php?rencontreId=$1 [L]
 RewriteCond %{REQUEST_METHOD} PUT
 RewriteRule ^participation/([0-9]+)$ participation.php?participationId=$1 [L]
 
-#Réecriture pour le DELETE de la Participation pour le supprimer
+#Réecriture pour le DELETE de la Participation pour la supprimer
 #http://localhost:8081/participation?participationId=8 --> http://localhost:8081/participation/8
 RewriteCond %{REQUEST_METHOD} DELETE
-RewriteRule ^participation/([0-9]+)$ participation.php?id=$1 [L]
+RewriteRule ^participation/([0-9]+)$ participation.php?participationId=$1 [L]
+
+#Réecriture pour le DELETE de la Performance pour supprimer la performance à partir d'un participationId
+#http://localhost:8081/participation?perfParticipationId=8 --> http://localhost:8081/participation/performance/8
+RewriteCond %{REQUEST_METHOD} DELETE
+RewriteRule ^participation/performance/([0-9]+)$ participation.php?perfParticipationId=$1 [L]
 
 #Réecriture pour l'url des Participations
 #http://localhost:8081/participation.php --> http://localhost:8081/participation
