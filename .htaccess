@@ -1,5 +1,7 @@
 RewriteEngine On
 
+#Permet de transmettre le header Authorization pour pouvoir vérifier le token
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 #############
 #Classe Commentaire

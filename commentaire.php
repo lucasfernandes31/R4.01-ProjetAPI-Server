@@ -5,10 +5,36 @@ require_once __DIR__ . '/utils.php';
 
 use R301\Controleur\CommentaireControleur;
 
-
 $http_method = $_SERVER['REQUEST_METHOD'];
 
 $commentaireControleur = CommentaireControleur::getInstance();
+
+$token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+$context = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'header' => "Authorization: " . $token,
+        'ignore_errors' => true
+    ]
+]);
+$response = file_get_contents("http://localhost/projet-api/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
+$responseTab = json_decode($response, true);
+if (!$responseTab || $responseTab['status_code'] !== 200) {
+    deliver_response(401, "Token invalide");
+    die();
+}
+
+// Récupérer le rôle depuis le token pour ne pas pouvoir passer un autre role que le sien dans le body du json
+$tokenValue = str_replace('Bearer ', '', $token);
+$payload = json_decode(base64_decode(explode('.', $tokenValue)[1]), true);
+$role = $payload['role'];
+
+if($role!=='admin'){
+  deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
+  die();
+}
+
+$http_method = $_SERVER['REQUEST_METHOD'];
 
 switch($http_method){
 
