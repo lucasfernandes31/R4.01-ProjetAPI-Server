@@ -17,10 +17,29 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 $participationControleur = ParticipationControleur::getInstance();
 
+$token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+$context = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'header' => "Authorization: " . $token,
+        'ignore_errors' => true
+    ]
+]);
+$response = file_get_contents("http://localhost/projet-api/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
+$responseTab = json_decode($response, true);
+if (!$responseTab || $responseTab['status_code'] !== 200) {
+    deliver_response(401, "Token invalide");
+    die();
+}
+
+// Récupérer le rôle depuis le token pour ne pas pouvoir passer un autre role que le sien dans le body du json
+$tokenValue = str_replace('Bearer ', '', $token);
+$payload = json_decode(base64_decode(explode('.', $tokenValue)[1]), true);
+$role = $payload['role'];
+
 switch($http_method){
 
   case 'GET':
-
     $allowed_params = ['rencontreId'];
     $unknown_params = array_diff(array_keys($_GET), $allowed_params);
 
@@ -46,7 +65,10 @@ switch($http_method){
   
 
   case 'POST':
-
+    if($role!=='admin'){
+      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
+      die();
+    }
     $postedData = file_get_contents('php://input');
     $data = json_decode($postedData, true);
 
@@ -71,7 +93,10 @@ switch($http_method){
 
   
   case 'PUT':
-
+    if($role!=='admin'){
+      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
+      die();
+    }
     $postedData = file_get_contents('php://input');
     $data = json_decode($postedData, true);
 
@@ -114,7 +139,10 @@ switch($http_method){
 
   
   case 'DELETE':
-
+    if($role!=='admin'){
+      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
+      die();
+    }
     //////////
     // Suppression de la participation d'un joueur à un match
     if(isset($_GET['participationId']) && isIntString($_GET['participationId'])){
