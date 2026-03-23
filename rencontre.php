@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/autoload.php';
 require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/token_utils.php';
 
 use R301\Controleur\RencontreControleur;
 use R301\Modele\Rencontre\RencontreLieu;
@@ -11,27 +12,13 @@ $http_method = $_SERVER['REQUEST_METHOD'];
 
 $rencontreControleur = RencontreControleur::getInstance();
 
-$token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
-$tokenValue = str_replace('Bearer ', '', $token);
-$parts = explode('.', $tokenValue);
-$payload = isset($parts[1]) ? json_decode(base64_decode($parts[1]), true) : null;//car si il n'est pas connecté alors ça sera null
-$role = $payload['role'] ?? null;
-
+//////////
+// Vérification validité du token SI méthode pas GET
+// On vérifie alors que c'est l'admin car toutes les autres méthodes ne sont accessibles que par lui
 if ($http_method !== 'GET') {//car la liste des rencontre est accessible sans connexion
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header' => "Authorization: " . $token,
-            'ignore_errors' => true
-        ]
-    ]);
-    $response = file_get_contents("http://localhost/projet-api/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
-    $responseTab = json_decode($response, true);
-    if (!$responseTab || $responseTab['status_code'] !== 200) {
-        deliver_response(401, "Token invalide");
-        die();
-    }
+    verifier_token('admin');
 }
+
 switch($http_method){
 
   case 'GET':
@@ -69,10 +56,6 @@ switch($http_method){
 
 
   case 'POST':
-    if($role!=='admin'){
-      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
-      die();
-    }
     
     $postedData = file_get_contents('php://input');
     $data = json_decode($postedData, true);
@@ -108,10 +91,6 @@ switch($http_method){
 
 
   case 'PUT':
-    if($role!=='admin'){
-      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
-      die();
-    }
 
     $postedData = file_get_contents('php://input');
     $data = json_decode($postedData, true);
@@ -185,10 +164,6 @@ switch($http_method){
 
 
   case 'DELETE':
-    if($role!=='admin'){
-      deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");
-      die();
-    }
     //////////
     // Supprimer une rencontre avec son ID rencontreId
     if(isset($_GET['rencontreId']) && isIntString($_GET['rencontreId'])){

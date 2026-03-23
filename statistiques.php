@@ -2,27 +2,18 @@
 
 require_once __DIR__ . '/autoload.php';
 require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/token_utils.php';
 
 use R301\Controleur\StatistiquesControleur;
 
-$http_method = $_SERVER['REQUEST_METHOD'];
+//////////
+// Vérification de la validité du token
+// et récupération du payload
+verifier_token();
 
+$http_method = $_SERVER['REQUEST_METHOD'];
 $statistiquesControleur = StatistiquesControleur::getInstance();
 
-$token = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
-$context = stream_context_create([
-    'http' => [
-        'method' => 'GET',
-        'header' => "Authorization: " . $token,
-        'ignore_errors' => true
-    ]
-]);
-$response = file_get_contents("http://localhost/projet-api/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
-$responseTab = json_decode($response, true);
-if (!$responseTab || $responseTab['status_code'] !== 200) {
-    deliver_response(401, "Token invalide");
-    die();
-}
 
 switch($http_method){
 

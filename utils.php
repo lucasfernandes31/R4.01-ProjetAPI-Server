@@ -35,5 +35,37 @@ function isIntString($nombre){
   return (string)(int)$nombre === $nombre && (int)$nombre > 0;
 }
 
+//////////
+// Décode un url en base 64
+function base64url_decode($data) {
+    // Remplacer les caractères URL-safe par les caractères base64 standard
+		// On fait l'inverse du encode en remplacant '-_' par '+/' voir doc sur google, c'est chiant.
+		// jwt utilise base64_url qui est légèrement différent du base64 standard (adapté aux url)
+    $base64 = strtr($data, '-_', '+/');
+    
+    // Ajouter le padding '=' si nécessaire
+		// Car base64 fait des blocs de 4 caractères et si il y en a pas assez on rajoute des = pour combler
+    $remainder = strlen($base64) % 4;
+    if ($remainder) {
+        $padlen = 4 - $remainder;
+        $base64 .= str_repeat('=', $padlen);
+    }
+    
+    return base64_decode($base64);
+}
+
+//////////
+// Retourne le payload d'un token JWT sous forme de tableau
+function get_payload($jwt){
+	$token_parts = explode('.',$jwt);
+
+	$base64_url_payload = $token_parts[1];
+	$payload_json = base64url_decode($base64_url_payload);
+
+	$payload = json_decode($payload_json, true);
+
+	return $payload;
+
+}
 
 ?>
