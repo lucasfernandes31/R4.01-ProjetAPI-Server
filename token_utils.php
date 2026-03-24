@@ -21,7 +21,7 @@ function verifier_token(string $role_requis = null): array {
     ]);
 
     // Requête au serveur auth
-    $response = file_get_contents("http://localhost/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
+    $response = file_get_contents("https://r401-jwt.alwaysdata.net/authapi", false, $context);
     $responseTab = json_decode($response, true);
 
     // Si réponse pas 200 alors le token est pas valide
