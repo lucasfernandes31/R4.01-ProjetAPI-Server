@@ -2,7 +2,7 @@
 
 https://r301.kilya.coop/
 
-Identifiants:
+Identifiants admin:
 admin admin
 
 ## Configuration Apache

@@ -12,6 +12,8 @@ require_once __DIR__ . '/utils.php';
 
 $http_method = $_SERVER['REQUEST_METHOD'];
 
+$urlAPIAuth = 'https://r401-jwt.alwaysdata.net/authapi';
+
 switch($http_method) {
     case 'POST':
 
@@ -27,7 +29,7 @@ switch($http_method) {
             ]
         ]);
 
-        $response = file_get_contents("http://localhost/R4.01-ProjetAPI-Auth/authapi.php", false, $context);
+        $response = file_get_contents($urlAPIAuth, false, $context);
         $responseTab = json_decode($response, true);
 
         deliver_response($responseTab['status_code'], $responseTab['status_message'], $responseTab['data']);//renvoie le code, le message du status et le token
