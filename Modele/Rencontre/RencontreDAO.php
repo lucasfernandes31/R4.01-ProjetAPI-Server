@@ -102,9 +102,14 @@ class RencontreDAO {
     }
 
     public function supprimerRencontre(int $rencontreId) : bool {
-        $query = 'DELETE FROM rencontre WHERE rencontre_id = :rencontreId';
-        $statement=$this->database->pdo()->prepare($query);
-        $statement->bindValue(':rencontreId', $rencontreId);
-        return $statement->execute();
+        try {
+            $query = 'DELETE FROM rencontre WHERE rencontre_id = :rencontreId';
+            $statement = $this->database->pdo()->prepare($query);
+            $statement->bindValue(':rencontreId', $rencontreId);
+            $statement->execute();
+            return $statement->rowCount() > 0;
+        } catch (\PDOException $e) { // permet de retourner false au lieu de crash si erreur SQL (clé étrangère référencée ailleurs par exemple)
+            return false;
+        }
     }
 }
