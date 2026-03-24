@@ -30,7 +30,7 @@ switch($http_method) {
         ]);
 
         $response = file_get_contents($urlAPIAuth, false, $context);
-        $responseTab = json_decode($response, true);
+        $responseTab = get_response_tab_without_warnings($response);
 
         deliver_response($responseTab['status_code'], $responseTab['status_message'], $responseTab['data']);//renvoie le code, le message du status et le token
 

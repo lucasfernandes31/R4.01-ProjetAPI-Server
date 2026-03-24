@@ -22,7 +22,7 @@ function verifier_token(string $role_requis = null): array {
 
     // Requête au serveur auth
     $response = file_get_contents("https://r401-jwt.alwaysdata.net/authapi", false, $context);
-    $responseTab = json_decode($response, true);
+    $responseTab = get_response_tab_without_warnings($response);
 
     // Si réponse pas 200 alors le token est pas valide
     if (!$responseTab || $responseTab['status_code'] !== 200) {

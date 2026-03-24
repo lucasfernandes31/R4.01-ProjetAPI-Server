@@ -68,4 +68,16 @@ function get_payload($jwt){
 
 }
 
+//////////
+// Permet de retourner uniquement la réponse donnée et pas les warnings
+// que le serveur en prod génère (fait crash sinon)
+function get_response_tab_without_warnings($response){
+    $jsonStart = strpos($response, '{');
+    if ($jsonStart > 0) {
+        $response = substr($response, $jsonStart);
+    }
+    $responseTab = json_decode($response, true);
+    return $responseTab;
+}
+
 ?>
