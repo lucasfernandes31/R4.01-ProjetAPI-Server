@@ -25,6 +25,7 @@ class JoueurControleur {
         return self::$instance;
     }
 
+    //Ajoute un joueur dans l'équipe
     public function ajouterJoueur( // FAIT
         string $nom,
         string $prenom,
@@ -48,11 +49,11 @@ class JoueurControleur {
         return $this->joueurs->insertJoueur($joueurACreer);
     }
 
-    public function getJoueurById(int $joueurId) : ?Joueur { // FAIT
+    public function getJoueurById(int $joueurId) : ?Joueur {
         return $this->joueurs->selectJoueurById($joueurId);
     }
 
-    public function listerLesJoueursSelectionnablesPourUnMatch(int $rencontreId) : array { // FAIT
+    public function listerLesJoueursSelectionnablesPourUnMatch(int $rencontreId) : array {
         $this->rencontre->selectRencontreById($rencontreId); // ligne rajoutée pour renforcer la robustesse de l'API. Declenche une erreur si l'ID de rencontre existe pas
         $joueursActifs = $this->joueurs->selectJoueursByStatut(JoueurStatut::ACTIF);
         $joueursSelectionnables = [];
@@ -66,11 +67,11 @@ class JoueurControleur {
         return $joueursSelectionnables;
     }
 
-    public function listerTousLesJoueurs() : array { // FAIT
+    public function listerTousLesJoueurs() : array {
         return $this->joueurs->selectAllJoueurs();
     }
 
-    public function modifierJoueur( // FAIT
+    public function modifierJoueur(
         int $joueurId,
         string $nom,
         string $prenom,
@@ -93,7 +94,7 @@ class JoueurControleur {
         return $this->joueurs->updateJoueur($joueurAModifier);
     }
 
-    public function rechercherLesJoueurs(string $recherche, string $statut) : array { // FAIT
+    public function rechercherLesJoueurs(string $recherche, string $statut) : array {
         $tousLesjoueurs = $this->joueurs->selectAllJoueurs();
         $joueursTrouves = [];
 
@@ -116,7 +117,7 @@ class JoueurControleur {
         return $joueursTrouves;
     }
 
-    public function supprimerJoueur(int $joueurId) : bool { // FAIT
+    public function supprimerJoueur(int $joueurId) : bool {
         $this->joueurs->selectJoueurById($joueurId); // ligne rajoutée pour renforcer la robustesse de l'API. Declenche une erreur si l'ID du joueur n'existe pas
         return $this->joueurs->supprimerJoueur($joueurId);
 }

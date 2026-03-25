@@ -7,6 +7,7 @@ use R301\Modele\Rencontre\RencontreResultat;
 class StatistiquesEquipe implements \JsonSerializable {
     private readonly array $rencontres;
 
+    //Réecriture des classes pour remplacer par des tableaux pour que ce soit plus facile à parcourir
     public function __construct(
         array $rencontres
     ) {
