@@ -184,6 +184,9 @@ switch($http_method){
       deliver_response(403,"Vous n'avez pas les droits pour effectuer cette action");//interdire n'importe quelle action si l'utilisateur n'est pas admin
       die();
     }
+
+    ///////////
+    //  Suppression d'un joueur en fonction de son ID
     if(isset($_GET['id']) && isIntString($_GET['id'])){
 
       try{

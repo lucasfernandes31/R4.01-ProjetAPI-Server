@@ -26,7 +26,7 @@ class JoueurControleur {
     }
 
     //Ajoute un joueur dans l'équipe
-    public function ajouterJoueur( // FAIT
+    public function ajouterJoueur(
         string $nom,
         string $prenom,
         string $numeroDeLicence,
