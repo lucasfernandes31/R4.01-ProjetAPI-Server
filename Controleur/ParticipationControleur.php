@@ -26,15 +26,15 @@ class ParticipationControleur {
         return self::$instance;
     }
 
-    public function lejoueurEstDejaSurLaFeuilleDeMatch(int $rencontreId, int $joueurId) : bool { // PAS FAIT car pas utile niveau endpoint, utilisé par d'autres controlleurs seulement
+    public function lejoueurEstDejaSurLaFeuilleDeMatch(int $rencontreId, int $joueurId) : bool {
         return $this->participations->lejoueurEstDejaSurLaFeuilleDeMatch($rencontreId, $joueurId);
     }
 
-    public function listerToutesLesParticipations() : array { // FAIT
+    public function listerToutesLesParticipations() : array {
         return $this->participations->selectAllParticipations();
     }
 
-    public function getFeuilleDeMatch(int $rencontreId) : FeuilleDeMatch { // FAIT
+    public function getFeuilleDeMatch(int $rencontreId) : FeuilleDeMatch {
         return new FeuilleDeMatch($this->participations->selectParticipationsByRencontreId($rencontreId));
     }
 
@@ -42,7 +42,7 @@ class ParticipationControleur {
         return $this->participations->selectParticipationById($participationId);
     }
 
-    public function assignerUnParticipant( // FAIT
+    public function assignerUnParticipant(
         int $joueurId,
         int $rencontreId,
         Poste $poste,
@@ -69,7 +69,7 @@ class ParticipationControleur {
         }
     }
 
-    public function modifierParticipation( // FAIT
+    public function modifierParticipation(
         int $participationId,
         Poste $poste,
         TitulaireOuRemplacant $titulaireOuRemplacant,
@@ -93,11 +93,11 @@ class ParticipationControleur {
         }
     }
 
-    public function supprimerLaParticipation(int $participationId) : bool { // FAIT
+    public function supprimerLaParticipation(int $participationId) : bool {
         return $this->participations->deleteParticipation($participationId);
     }
 
-    public function mettreAJourLaPerformance( // FAIT
+    public function mettreAJourLaPerformance(
         int $participationId,
         string $performance
     ) : bool {

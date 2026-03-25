@@ -25,7 +25,8 @@ class CommentaireControleur {
         return self::$instance;
     }
 
-    public function ajouterCommentaire( // FAIT
+    //Ajoute un contrôleur pour le joueur d'id $joueurId
+    public function ajouterCommentaire(
         string $contenu,
         string $joueurId
     ) : bool {
@@ -39,12 +40,12 @@ class CommentaireControleur {
         return $this->commentaires->insertCommentaire($commentaireACreer, $joueurId);
     }
 
-    public function listerLesCommentairesDuJoueur(string $joueurId) : array { // FAIT
+    public function listerLesCommentairesDuJoueur(string $joueurId) : array {
         $this->joueurs->selectJoueurById($joueurId); // pour renforcer robustesse de l'API, fait planter la fonction (exit) si aucun joueur trouvé
         return $this->commentaires->selectCommentaireByJoueurId($joueurId);
     }
 
-    public function supprimerCommentaire(string $commentaireId) : bool { // FAIT
+    public function supprimerCommentaire(string $commentaireId) : bool {
         return $this->commentaires->deleteCommentaire($commentaireId);
     }
 }

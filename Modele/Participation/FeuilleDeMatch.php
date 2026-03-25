@@ -72,6 +72,7 @@ class FeuilleDeMatch implements \JsonSerializable {
         return true;
     }
 
+    //La fonction getParticipants est privée donc il faut utiliser cette fonction pour pouvoir l'appeler en dehors de la classe
     public function jsonSerialize(): array {
         return [
             "participants" => $this->getParticipants()
